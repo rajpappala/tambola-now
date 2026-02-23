@@ -1,16 +1,9 @@
-function App() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center space-y-4">
-        <h1 className="text-5xl font-extrabold text-brand-500 tracking-tight">
-          Tambola Now
-        </h1>
-        <p className="text-slate-400 text-lg">
-          Family Tambola, made simple.
-        </p>
-      </div>
-    </div>
-  )
-}
+import { useGameStore } from '@/store/gameStore'
+import HomeScreen from '@/components/HomeScreen'
+import GameScreen from '@/components/GameScreen'
 
-export default App
+export default function App() {
+  const screen = useGameStore(s => s.screen)
+
+  return screen === 'home' ? <HomeScreen /> : <GameScreen />
+}
