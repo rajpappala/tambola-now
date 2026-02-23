@@ -52,7 +52,7 @@ export default function CallerControls() {
   const isFinished = status === 'finished'
 
   return (
-    <div className="space-y-4 pb-4">
+    <div className="space-y-2 pb-2">
       {/* Main controls */}
       <div className="flex gap-2 justify-center">
         {/* Start / Pause / Resume */}
@@ -112,7 +112,7 @@ export default function CallerControls() {
       </div>
 
       {/* Speed + mode controls */}
-      <div className="space-y-3 bg-slate-900 rounded-xl p-3">
+      <div className="space-y-2 bg-slate-900 rounded-xl p-2.5">
         {/* Mode toggle */}
         <div className="flex items-center justify-between">
           <span className="text-slate-400 text-sm">Mode</span>

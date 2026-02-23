@@ -11,60 +11,54 @@ export default function GameScreen() {
   const { goToScreen, tickets, generateTickets } = useGameStore()
   const [tab, setTab] = useState<Tab>('board')
 
-  // Ensure we always have a ticket
   if (tickets.length === 0) generateTickets(1)
 
   return (
-    <div className="min-h-screen flex flex-col max-w-lg mx-auto">
-      {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-800 sticky top-0 z-10">
+    // h-screen + overflow-hidden = nothing scrolls, everything fits
+    <div className="h-screen flex flex-col overflow-hidden max-w-lg mx-auto">
+
+      {/* Header — compact */}
+      <header className="flex-none flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800">
         <button
           onClick={() => goToScreen('home')}
-          className="text-slate-400 hover:text-white transition-colors text-sm no-tap-highlight"
+          className="text-slate-400 hover:text-white text-sm no-tap-highlight"
         >
           ← Back
         </button>
-        <span className="font-bold text-brand-500 tracking-tight">Tambola Now</span>
-        <button
-          onClick={() => generateTickets(1)}
-          className="text-slate-500 hover:text-slate-300 transition-colors text-xs no-tap-highlight"
-          title="New ticket"
-        >
-          New ticket
-        </button>
+        <span className="font-bold text-brand-500 tracking-tight text-sm">Tambola Now</span>
+        <div className="flex gap-2">
+          {(['board', 'ticket'] as Tab[]).map(t => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={[
+                'px-3 py-1 rounded-full text-xs font-medium transition-colors no-tap-highlight',
+                tab === t
+                  ? 'bg-brand-500 text-white'
+                  : 'text-slate-500 hover:text-slate-300',
+              ].join(' ')}
+            >
+              {t === 'board' ? '🎯 Board' : '🎟 Ticket'}
+            </button>
+          ))}
+        </div>
       </header>
 
-      {/* Current number + recent strip — always visible */}
-      <div className="bg-slate-950 border-b border-slate-800">
+      {/* Current number + recent strip — compact, fixed height */}
+      <div className="flex-none bg-slate-950 border-b border-slate-800">
         <RecentNumbers />
       </div>
 
-      {/* Tabs */}
-      <div className="flex border-b border-slate-800 bg-slate-950">
-        {(['board', 'ticket'] as Tab[]).map(t => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={[
-              'flex-1 py-2.5 text-sm font-medium transition-colors capitalize no-tap-highlight',
-              tab === t
-                ? 'text-brand-500 border-b-2 border-brand-500'
-                : 'text-slate-500 hover:text-slate-300',
-            ].join(' ')}
-          >
-            {t === 'board' ? '🎯 Board' : '🎟 Ticket'}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab content */}
-      <div className="flex-1 overflow-y-auto">
+      {/* Main content — flex-1 min-h-0 so it fills EXACTLY remaining space */}
+      <div className="flex-1 min-h-0">
         {tab === 'board' ? (
-          <div className="p-3">
+          // p-2 padding, h-full so NumberBoard can stretch to fill
+          <div className="h-full p-2">
             <NumberBoard />
           </div>
         ) : (
-          <div className="p-3 space-y-3">
+          // Ticket tab can scroll (it's a different use case)
+          <div className="h-full overflow-y-auto p-3 space-y-3">
             {tickets.map(ticket => (
               <TicketCard key={ticket.id} ticket={ticket} />
             ))}
@@ -72,8 +66,8 @@ export default function GameScreen() {
         )}
       </div>
 
-      {/* Controls — sticky bottom */}
-      <div className="px-3 pt-3 bg-slate-950 border-t border-slate-800 sticky bottom-0">
+      {/* Controls — compact, fixed at bottom */}
+      <div className="flex-none px-3 pt-2 bg-slate-950 border-t border-slate-800">
         <CallerControls />
       </div>
     </div>
