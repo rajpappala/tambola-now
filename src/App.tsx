@@ -6,6 +6,7 @@ import HostSetupScreen from '@/components/HostSetupScreen'
 import LobbyScreen from '@/components/LobbyScreen'
 import JoinScreen from '@/components/JoinScreen'
 import RoomGameScreen from '@/components/RoomGameScreen'
+import TicketsScreen from '@/components/TicketsScreen'
 
 export default function App() {
   const screen = useGameStore(s => s.screen)
@@ -30,6 +31,8 @@ export default function App() {
       return <JoinScreen />
     case 'room-game':
       return <RoomGameScreen />
+    case 'tickets':
+      return <TicketsScreen />
     case 'game':
     default:
       return <GameScreen />

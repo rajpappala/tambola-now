@@ -65,6 +65,13 @@ export default function HomeScreen() {
         >
           🔗 Join a Game
         </button>
+
+        <button
+          onClick={() => goToScreen('tickets')}
+          className="w-full py-3 rounded-2xl bg-transparent border border-slate-700 hover:border-slate-500 text-slate-300 font-medium text-base transition-colors no-tap-highlight"
+        >
+          🎟 Create Tickets
+        </button>
       </div>
 
       <p className="text-slate-600 text-sm">No downloads · No sign-ups · Just play</p>
