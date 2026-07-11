@@ -2,12 +2,12 @@ import { useGameStore } from '@/store/gameStore'
 import { initAudio } from '@/utils/speechEngine'
 
 export default function HomeScreen() {
-  const { goToScreen, initGame, generateTickets } = useGameStore()
+  const { goToScreen, initGame, generateTickets, settings, updateSettings } = useGameStore()
 
   function handlePlaySolo() {
     initAudio() // unlock audio on this gesture
     initGame()
-    generateTickets(1)
+    generateTickets(settings.ticketCount)
     goToScreen('game')
   }
 
@@ -24,6 +24,27 @@ export default function HomeScreen() {
 
       {/* Actions */}
       <div className="w-full max-w-xs space-y-3">
+        {/* Ticket count picker */}
+        <div className="flex items-center justify-between px-1">
+          <span className="text-slate-400 text-sm">Tickets</span>
+          <div className="flex rounded-lg overflow-hidden border border-slate-700">
+            {[1, 2, 3].map(n => (
+              <button
+                key={n}
+                onClick={() => updateSettings({ ticketCount: n })}
+                className={[
+                  'w-10 py-1.5 text-sm font-bold transition-colors no-tap-highlight',
+                  settings.ticketCount === n
+                    ? 'bg-brand-500 text-white'
+                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700',
+                ].join(' ')}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <button
           onClick={handlePlaySolo}
           className="w-full py-4 rounded-2xl bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white font-bold text-xl transition-colors no-tap-highlight"
