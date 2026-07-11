@@ -1,6 +1,6 @@
 export type GameStatus = 'idle' | 'playing' | 'paused' | 'finished'
 export type GameMode = 'auto' | 'manual'
-export type Screen = 'home' | 'game'
+export type Screen = 'home' | 'game' | 'host-setup' | 'lobby' | 'join' | 'room-game'
 
 export interface GameSettings {
   callInterval: number // seconds 1–30
@@ -18,6 +18,51 @@ export interface Ticket {
   id: string
   grid: number[][] // 3×9 — 0 = blank
   markedCells: boolean[][] // 3×9
+}
+
+export type RoomStatus = 'lobby' | 'playing' | 'paused' | 'finished'
+
+export interface RoomPlayer {
+  id: string
+  name: string
+  isHost: boolean
+}
+
+/** Authoritative room snapshot — written by the host, broadcast to everyone. */
+export interface RoomSnapshot {
+  code: string
+  hostId: string
+  players: RoomPlayer[]
+  settings: GameSettings
+  status: RoomStatus
+  calledNumbers: number[]
+  currentNumber: number | null
+}
+
+export interface RoomStore {
+  code: string | null
+  isHost: boolean
+  selfId: string
+  selfName: string
+  players: RoomPlayer[]
+  settings: GameSettings
+  status: RoomStatus
+  calledNumbers: number[]
+  currentNumber: number | null
+  tickets: Ticket[]
+  joinError: string | null
+
+  createRoom: (settings: GameSettings) => void
+  joinRoom: (code: string, name: string) => boolean
+  leaveRoom: () => void
+  removePlayer: (playerId: string) => void
+  startGame: () => void
+  pauseGame: () => void
+  resumeGame: () => void
+  resetGame: () => void
+  callNext: () => void
+  markCell: (ticketId: string, row: number, col: number) => void
+  clearJoinError: () => void
 }
 
 export interface GameStore {
