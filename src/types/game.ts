@@ -1,6 +1,6 @@
 export type GameStatus = 'idle' | 'playing' | 'paused' | 'finished'
 export type GameMode = 'auto' | 'manual'
-export type Screen = 'home' | 'game' | 'host-setup' | 'lobby' | 'join' | 'room-game'
+export type Screen = 'home' | 'game' | 'host-setup' | 'lobby' | 'join' | 'room-game' | 'tickets'
 
 export interface GameSettings {
   callInterval: number // seconds 1–30

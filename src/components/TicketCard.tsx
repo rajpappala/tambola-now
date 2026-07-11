@@ -6,9 +6,11 @@ interface Props {
   onMarkCell: (row: number, col: number) => void
   index?: number
   total?: number
+  /** No live caller — every number is tappable, not just called ones. */
+  freeMark?: boolean
 }
 
-export default function TicketCard({ ticket, calledNumbers, onMarkCell, index, total }: Props) {
+export default function TicketCard({ ticket, calledNumbers, onMarkCell, index, total, freeMark = false }: Props) {
   return (
     <div className="w-full rounded-2xl overflow-hidden border border-slate-700 bg-slate-900">
       {/* Header */}
@@ -27,7 +29,7 @@ export default function TicketCard({ ticket, calledNumbers, onMarkCell, index, t
         {ticket.grid.map((row, ri) =>
           row.map((num, ci) => {
             const isBlank = num === 0
-            const isCalled = !isBlank && calledNumbers.includes(num)
+            const isCalled = !isBlank && (freeMark || calledNumbers.includes(num))
             const isMarked = ticket.markedCells[ri][ci]
 
             return (
@@ -58,12 +60,16 @@ export default function TicketCard({ ticket, calledNumbers, onMarkCell, index, t
         <span className="flex items-center gap-1">
           <span className="w-3 h-3 rounded bg-brand-500 inline-block" /> Marked
         </span>
-        <span className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-green-900 ring-1 ring-green-600 inline-block" /> Called
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-slate-700 inline-block" /> Waiting
-        </span>
+        {!freeMark && (
+          <>
+            <span className="flex items-center gap-1">
+              <span className="w-3 h-3 rounded bg-green-900 ring-1 ring-green-600 inline-block" /> Called
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-3 h-3 rounded bg-slate-700 inline-block" /> Waiting
+            </span>
+          </>
+        )}
       </div>
     </div>
   )
