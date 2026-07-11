@@ -1,10 +1,13 @@
-import { useGameStore } from '@/store/gameStore'
-
 const COLS = 10
 
-export default function NumberBoard() {
-  const { calledNumbers, currentNumber, settings } = useGameStore()
-  const total = settings.numberRange
+interface Props {
+  calledNumbers: number[]
+  currentNumber: number | null
+  numberRange: number
+}
+
+export default function NumberBoard({ calledNumbers, currentNumber, numberRange }: Props) {
+  const total = numberRange
   const rows = Math.ceil(total / COLS) // 9 for 90 numbers
 
   return (

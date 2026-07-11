@@ -53,21 +53,17 @@ export default function HomeScreen() {
         </button>
 
         <button
-          disabled
-          className="w-full py-4 rounded-2xl bg-slate-800 text-slate-500 font-bold text-xl cursor-not-allowed"
-          title="Multiplayer coming soon"
+          onClick={() => goToScreen('host-setup')}
+          className="w-full py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-white font-bold text-xl transition-colors no-tap-highlight"
         >
           🏠 Host a Game
-          <span className="ml-2 text-xs font-normal text-slate-600">soon</span>
         </button>
 
         <button
-          disabled
-          className="w-full py-4 rounded-2xl bg-slate-800 text-slate-500 font-bold text-xl cursor-not-allowed"
-          title="Multiplayer coming soon"
+          onClick={() => goToScreen('join')}
+          className="w-full py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-white font-bold text-xl transition-colors no-tap-highlight"
         >
           🔗 Join a Game
-          <span className="ml-2 text-xs font-normal text-slate-600">soon</span>
         </button>
       </div>
 

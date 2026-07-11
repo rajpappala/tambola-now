@@ -1,12 +1,21 @@
-import { useGameStore } from '@/store/gameStore'
-
 interface Props {
   layout?: 'horizontal' | 'sidebar'
+  currentNumber: number | null
+  calledNumbers: number[]
+  recentCount: number
+  totalRange: number
+  isIdle: boolean
 }
 
-export default function RecentNumbers({ layout = 'horizontal' }: Props) {
-  const { currentNumber, calledNumbers, settings, status } = useGameStore()
-  const recent = calledNumbers.slice(-settings.recentCount - 1, -1).reverse()
+export default function RecentNumbers({
+  layout = 'horizontal',
+  currentNumber,
+  calledNumbers,
+  recentCount,
+  totalRange,
+  isIdle,
+}: Props) {
+  const recent = calledNumbers.slice(-recentCount - 1, -1).reverse()
 
   if (layout === 'sidebar') {
     return (
@@ -24,7 +33,7 @@ export default function RecentNumbers({ layout = 'horizontal' }: Props) {
         ) : (
           <div className="w-20 h-20 rounded-full border-2 border-dashed border-slate-700 flex items-center justify-center">
             <span className="text-slate-600 text-xs text-center">
-              {status === 'idle' ? 'Start' : '—'}
+              {isIdle ? 'Start' : '—'}
             </span>
           </div>
         )}
@@ -45,7 +54,7 @@ export default function RecentNumbers({ layout = 'horizontal' }: Props) {
         )}
 
         <p className="text-slate-500 text-xs text-center">
-          {calledNumbers.length} / {settings.numberRange}
+          {calledNumbers.length} / {totalRange}
         </p>
       </div>
     )
@@ -66,7 +75,7 @@ export default function RecentNumbers({ layout = 'horizontal' }: Props) {
       ) : (
         <div className="flex-none w-14 h-14 rounded-full border-2 border-dashed border-slate-700 flex items-center justify-center">
           <span className="text-slate-600 text-xs text-center leading-tight">
-            {status === 'idle' ? 'Start' : '—'}
+            {isIdle ? 'Start' : '—'}
           </span>
         </div>
       )}
@@ -85,10 +94,10 @@ export default function RecentNumbers({ layout = 'horizontal' }: Props) {
 
       <div className="ml-auto text-right">
         <div className="text-slate-400 text-xs font-medium">
-          {calledNumbers.length} / {settings.numberRange}
+          {calledNumbers.length} / {totalRange}
         </div>
         <div className="text-slate-600 text-xs">
-          {settings.numberRange - calledNumbers.length} left
+          {totalRange - calledNumbers.length} left
         </div>
       </div>
     </div>

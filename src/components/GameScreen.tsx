@@ -9,7 +9,7 @@ import TicketCard from './TicketCard'
 type Tab = 'board' | 'ticket'
 
 export default function GameScreen() {
-  const { goToScreen, tickets, generateTickets, settings, status } = useGameStore()
+  const { goToScreen, tickets, generateTickets, settings, status, calledNumbers, currentNumber, markCell } = useGameStore()
   const isLandscape = useIsLandscape()
   const [tab, setTab] = useState<Tab>('board')
 
@@ -50,7 +50,14 @@ export default function GameScreen() {
 
           {/* Current number + recent strip */}
           <div className="flex-1 min-h-0 flex flex-col justify-center overflow-hidden">
-            <RecentNumbers layout="sidebar" />
+            <RecentNumbers
+              layout="sidebar"
+              currentNumber={currentNumber}
+              calledNumbers={calledNumbers}
+              recentCount={settings.recentCount}
+              totalRange={settings.numberRange}
+              isIdle={status === 'idle'}
+            />
           </div>
 
           {/* Compact controls */}
@@ -62,7 +69,7 @@ export default function GameScreen() {
         {/* Main area — fills all remaining space */}
         <div className="flex-1 min-h-0 p-2 h-full">
           {tab === 'board' ? (
-            <NumberBoard />
+            <NumberBoard calledNumbers={calledNumbers} currentNumber={currentNumber} numberRange={settings.numberRange} />
           ) : (
             <div className="h-full overflow-y-auto space-y-3 pr-1">
               {status === 'idle' && (
@@ -75,7 +82,14 @@ export default function GameScreen() {
               )}
               <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
                 {tickets.map((ticket, i) => (
-                  <TicketCard key={ticket.id} ticket={ticket} index={i} total={tickets.length} />
+                  <TicketCard
+                    key={ticket.id}
+                    ticket={ticket}
+                    calledNumbers={calledNumbers}
+                    onMarkCell={(row, col) => markCell(ticket.id, row, col)}
+                    index={i}
+                    total={tickets.length}
+                  />
                 ))}
               </div>
             </div>
@@ -115,14 +129,21 @@ export default function GameScreen() {
 
       {/* Recent numbers strip */}
       <div className="flex-none border-b border-slate-800">
-        <RecentNumbers layout="horizontal" />
+        <RecentNumbers
+          layout="horizontal"
+          currentNumber={currentNumber}
+          calledNumbers={calledNumbers}
+          recentCount={settings.recentCount}
+          totalRange={settings.numberRange}
+          isIdle={status === 'idle'}
+        />
       </div>
 
       {/* Main content — fills remaining space */}
       <div className="flex-1 min-h-0">
         {tab === 'board' ? (
           <div className="h-full p-2">
-            <NumberBoard />
+            <NumberBoard calledNumbers={calledNumbers} currentNumber={currentNumber} numberRange={settings.numberRange} />
           </div>
         ) : (
           <div className="h-full overflow-y-auto p-3 space-y-3">
@@ -135,7 +156,14 @@ export default function GameScreen() {
               </button>
             )}
             {tickets.map((ticket, i) => (
-              <TicketCard key={ticket.id} ticket={ticket} index={i} total={tickets.length} />
+              <TicketCard
+                key={ticket.id}
+                ticket={ticket}
+                calledNumbers={calledNumbers}
+                onMarkCell={(row, col) => markCell(ticket.id, row, col)}
+                index={i}
+                total={tickets.length}
+              />
             ))}
           </div>
         )}

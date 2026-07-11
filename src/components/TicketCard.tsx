@@ -1,15 +1,14 @@
-import { useGameStore } from '@/store/gameStore'
 import type { Ticket } from '@/types/game'
 
 interface Props {
   ticket: Ticket
+  calledNumbers: number[]
+  onMarkCell: (row: number, col: number) => void
   index?: number
   total?: number
 }
 
-export default function TicketCard({ ticket, index, total }: Props) {
-  const { markCell, calledNumbers } = useGameStore()
-
+export default function TicketCard({ ticket, calledNumbers, onMarkCell, index, total }: Props) {
   return (
     <div className="w-full rounded-2xl overflow-hidden border border-slate-700 bg-slate-900">
       {/* Header */}
@@ -34,7 +33,7 @@ export default function TicketCard({ ticket, index, total }: Props) {
             return (
               <button
                 key={`${ri}-${ci}`}
-                onClick={() => markCell(ticket.id, ri, ci)}
+                onClick={() => onMarkCell(ri, ci)}
                 disabled={isBlank || !isCalled}
                 className={[
                   'aspect-square rounded text-xs font-bold transition-all no-tap-highlight',
