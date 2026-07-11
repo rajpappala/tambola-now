@@ -9,11 +9,11 @@ import TicketCard from './TicketCard'
 type Tab = 'board' | 'ticket'
 
 export default function GameScreen() {
-  const { goToScreen, tickets, generateTickets } = useGameStore()
+  const { goToScreen, tickets, generateTickets, settings, status } = useGameStore()
   const isLandscape = useIsLandscape()
   const [tab, setTab] = useState<Tab>('board')
 
-  if (tickets.length === 0) generateTickets(1)
+  if (tickets.length === 0) generateTickets(settings.ticketCount)
 
   // ─── LANDSCAPE: sidebar + full-height board ────────────────────────────────
   if (isLandscape) {
@@ -22,14 +22,30 @@ export default function GameScreen() {
         {/* Left sidebar */}
         <aside className="w-44 flex-none flex flex-col border-r border-slate-800">
           {/* Title + nav */}
-          <header className="flex-none flex items-center justify-between px-3 py-2 border-b border-slate-800">
-            <button
-              onClick={() => goToScreen('home')}
-              className="text-slate-400 hover:text-white text-xs no-tap-highlight"
-            >
-              ← Back
-            </button>
-            <span className="font-bold text-brand-500 text-xs tracking-tight">Tambola Now</span>
+          <header className="flex-none flex flex-col gap-1.5 px-3 py-2 border-b border-slate-800">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => goToScreen('home')}
+                className="text-slate-400 hover:text-white text-xs no-tap-highlight"
+              >
+                ← Back
+              </button>
+              <span className="font-bold text-brand-500 text-xs tracking-tight">Tambola Now</span>
+            </div>
+            <div className="flex gap-1">
+              {(['board', 'ticket'] as Tab[]).map(t => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  className={[
+                    'flex-1 py-1 rounded-full text-xs font-medium transition-colors no-tap-highlight',
+                    tab === t ? 'bg-brand-500 text-white' : 'bg-slate-800 text-slate-500 hover:text-slate-300',
+                  ].join(' ')}
+                >
+                  {t === 'board' ? '🎯 Board' : '🎟 Ticket'}
+                </button>
+              ))}
+            </div>
           </header>
 
           {/* Current number + recent strip */}
@@ -43,9 +59,27 @@ export default function GameScreen() {
           </div>
         </aside>
 
-        {/* Board — fills all remaining space */}
+        {/* Main area — fills all remaining space */}
         <div className="flex-1 min-h-0 p-2 h-full">
-          <NumberBoard />
+          {tab === 'board' ? (
+            <NumberBoard />
+          ) : (
+            <div className="h-full overflow-y-auto space-y-3 pr-1">
+              {status === 'idle' && (
+                <button
+                  onClick={() => generateTickets(settings.ticketCount)}
+                  className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition-colors no-tap-highlight"
+                >
+                  🔄 New Tickets
+                </button>
+              )}
+              <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
+                {tickets.map((ticket, i) => (
+                  <TicketCard key={ticket.id} ticket={ticket} index={i} total={tickets.length} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -92,8 +126,16 @@ export default function GameScreen() {
           </div>
         ) : (
           <div className="h-full overflow-y-auto p-3 space-y-3">
-            {tickets.map(ticket => (
-              <TicketCard key={ticket.id} ticket={ticket} />
+            {status === 'idle' && (
+              <button
+                onClick={() => generateTickets(settings.ticketCount)}
+                className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition-colors no-tap-highlight"
+              >
+                🔄 New Tickets
+              </button>
+            )}
+            {tickets.map((ticket, i) => (
+              <TicketCard key={ticket.id} ticket={ticket} index={i} total={tickets.length} />
             ))}
           </div>
         )}

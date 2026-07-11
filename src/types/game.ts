@@ -11,6 +11,7 @@ export interface GameSettings {
   chimeEnabled: boolean
   recentCount: number // how many past numbers to show beside current
   numberRange: number // 90 or 100
+  ticketCount: number // 1–3 tickets per player
 }
 
 export interface Ticket {

@@ -3,9 +3,11 @@ import type { Ticket } from '@/types/game'
 
 interface Props {
   ticket: Ticket
+  index?: number
+  total?: number
 }
 
-export default function TicketCard({ ticket }: Props) {
+export default function TicketCard({ ticket, index, total }: Props) {
   const { markCell, calledNumbers } = useGameStore()
 
   return (
@@ -13,7 +15,7 @@ export default function TicketCard({ ticket }: Props) {
       {/* Header */}
       <div className="px-3 py-2 bg-slate-800 flex justify-between items-center">
         <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">
-          Tambola Ticket
+          {total && total > 1 ? `Ticket ${(index ?? 0) + 1} of ${total}` : 'Tambola Ticket'}
         </span>
         <span className="text-xs text-slate-500">{ticket.id.slice(-4)}</span>
       </div>

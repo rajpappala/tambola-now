@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   chimeEnabled: true,
   recentCount: 5,
   numberRange: 90,
+  ticketCount: 1,
 }
 
 function shuffle(arr: number[]): number[] {
@@ -94,7 +95,8 @@ export const useGameStore = create<GameStore>()(
       },
 
       generateTickets: (count: number) => {
-        const tickets: Ticket[] = Array.from({ length: count }, (_, i) => ({
+        const clamped = Math.min(3, Math.max(1, count))
+        const tickets: Ticket[] = Array.from({ length: clamped }, (_, i) => ({
           id: `ticket-${i}-${Date.now()}`,
           grid: generateTicket(),
           markedCells: emptyMarked(),
